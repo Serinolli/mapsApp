@@ -24,7 +24,7 @@ export class HomePage {
 
   public async showMap(){
     //const location = new google.maps.LatLng(-22.4807481, -48.5633106); (posição fixa)
-    this.buscaPosicao();
+    await this.buscaPosicao();
 
     const options = {
       //location é a variável criada acima
@@ -41,7 +41,7 @@ export class HomePage {
       map: this.map,
       title: "Localização atual",
       //colocar ícones
-      icon:'maps.google.com/mapfiles/ms/icons/green-dot.png',
+      icon:'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
       animation: google.maps.Animation.BOUNCE
     })
   }
