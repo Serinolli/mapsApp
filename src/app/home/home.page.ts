@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { VirtualTimeScheduler } from 'rxjs';
 import { Geolocation } from '@ionic-native/geolocation/ngx'
+import { iLocal } from '../interfaces/iLocal';
 
 //Variável acessivel pelo java script quando este estiver dentro do type script
 declare var google: any;
@@ -15,12 +16,35 @@ export class HomePage {
 
   map: any;
   posicaoAtual: any;
-  marker: any;
-  marker2: any;
-  marker3: any;
-  marker4: any;
-  marker5: any;
+  
+public listaLocais: iLocal[] = [
+{
+    lat: -22.4807481,
+    lng: -48.5633106,
+    titulo: 'Barra Bonita, cidade simpatia!'
+},
+{
+  lat: -22.5122094,
+  lng: -48.55751886,
+  titulo: 'Igaraçu (perigoso aqui em!)'
+},
+{
+  lat: -22.5133455,
+  lng: -48.7329254,
+  titulo: 'Macatuba'
+},
+{
+  lat: -22.608839,
+  lng: -48.791712,
+  titulo: 'Lençois Paulista'
+},
+{
+  lat: -22.675501,
+  lng: -48.668346,
+  titulo: 'Areiopolis, vila da areia'
+},
 
+];
   
   //'map' declarado no html, pela # 
   //criada uma div de referência, irá apontar para o que for criado na variável "google"
@@ -51,54 +75,32 @@ export class HomePage {
       map: this.map,
       title: "Localização atual",
       //colocar ícones
-      icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
-      animation: google.maps.Animation.BOUNCE})
+      icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+      animation: google.maps.Animation.BOUNCE});
 
-      const marker = new google.maps.Marker({
-        position: new google.maps.LatLng(-22.4807481, -48.5633106),
-        map: this.map,
-        title: "Barra Bonita, cidade simpatia!",
-        //colocar ícones
-        icon: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-        animation: google.maps.Animation.DROP})
-
-        const marker2 = new google.maps.Marker({
-          position: new google.maps.LatLng(-22.5122094, -48.5575188),
-          map: this.map,
-          title: "Perigoso aqui em!",
-          //colocar ícones
-          icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-          animation: google.maps.Animation.DROP})
-
-        const marker3 = new google.maps.Marker({
-          position: new google.maps.LatLng(-22.5133455, -48.7329254),
-          map: this.map,
-          title: "Tem nada aqui",
-          //colocar ícones
-          icon: 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
-          animation: google.maps.Animation.DROP})
-
-          const marker4 = new google.maps.Marker({
-            position: new google.maps.LatLng(-22.608839, -48.791712),
-            map: this.map,
-            title: "LPNET é muito bom",
-            //colocar ícones
-            icon: 'https://maps.google.com/mapfiles/ms/icons/pink-dot.png',
-            animation: google.maps.Animation.DROP})
-
-            const marker5 = new google.maps.Marker({
-              position: new google.maps.LatLng(-22.675501, -48.668346),
-              map: this.map,
-              title: "Será que tem muita areia aqui?",
-              //colocar ícones
-              icon: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png',
-              animation: google.maps.Animation.DROP})
-  
+      for(let local of this.listaLocais){
+        this.adicionarMarcador(local);
+      }
+             
   }
   //"ionViewDidEnter" quando a página for aparecer, o mapa será chamado, ou seja, o mapa carrega APÓS a página.
   ionViewDidEnter() {
     this.showMap();
   }
+
+
+  //Para não repetir o codigo do marcador (logo o de cima) 5x, cria-se uma classe, de forma que:
+  private adicionarMarcador(Local: iLocal){
+    const {lat, lng, titulo} = Local;
+
+    const marcador = new google.maps.Marker({
+      position: { lat, lng },
+      map: this.map,
+      title: titulo
+  });
+}
+
+
 
   //o codigo para continuar recebendo a localização do usuário não pdoe ser posto solto, deve-se criar uma estrutura como:
   public async buscaPosicao() {
